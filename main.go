@@ -9,17 +9,20 @@ import (
 	"os"
 )
 
+var consumerKey *string = flag.String(
+	"consumerkey" ,
+	"mEF22DxPk6cocNoc3lQQBoj55",
+	"Consumer Key from Twitter. See: https://dev.twitter.com/apps/new")
+
+var consumerSecret *string = flag.String(
+	"consumerkey" ,
+	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9"
+	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
+flag.Parse()
+
 func main() {
 	fmt.Println("loading consumerkey......")
-	var consumerKey *string = flag.String(
-		"consumerkey",
-		"mEF22DxPk6cocNoc3lQQBoj55",
-		"Consumer Key from Twitter. See: https://dev.twitter.com/apps/new")
-	var consumerSecret *string = flag.String(
-		"consumersecret",
-		"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9",
-		"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
-	flag.Parse()
+	
 	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
 		fmt.Println("You must set the --consumerkey and --consumersecret flags.")
 		fmt.Println("---")
@@ -71,5 +74,9 @@ func main() {
 	_ = json.NewDecoder(response.Body).Decode(&statuses)
 	for _, s := range statuses {
 		fmt.Printf("@%v: %v\n", s.User.ScreenName, s.Text)
+
+		
+		}
+
 	}
-}
+
