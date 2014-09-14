@@ -16,7 +16,7 @@ var consumerKey *string = flag.String(
 
 var consumerSecret *string = flag.String(
 	"consumerkey" ,
-	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9"
+	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9" ,
 	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
 flag.Parse()
 
