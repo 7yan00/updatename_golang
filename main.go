@@ -18,9 +18,9 @@ var consumerSecret *string = flag.String(
 	"consumerkey" ,
 	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9" ,
 	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
-flag.Parse()
 
 func main() {
+	flag.Parse()
 	fmt.Println("loading consumerkey......")
 	
 	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
