@@ -9,13 +9,24 @@ import (
 	"os"
 )
 
+type user struct {
+		ID         int64  `json:"id"`
+		Name       string `json:"name"`
+		ScreenName string `json:"screen_name"`
+	}
+type status struct {
+		ID   int64  `json:"id"`
+		Text string `json:"text"`
+		User user   `json:"user"`
+	}
+
 var consumerKey *string = flag.String(
 	"consumerkey" ,
 	"mEF22DxPk6cocNoc3lQQBoj55",
 	"Consumer Key from Twitter. See: https://dev.twitter.com/apps/new")
 
 var consumerSecret *string = flag.String(
-	"consumerkey" ,
+	"consumersecret" ,
 	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9" ,
 	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
 
@@ -60,16 +71,6 @@ func main() {
 	}
 	defer response.Body.Close()
 
-	type user struct {
-		ID         int64  `json:"id"`
-		Name       string `json:"name"`
-		ScreenName string `json:"screen_name"`
-	}
-	type status struct {
-		ID   int64  `json:"id"`
-		Text string `json:"text"`
-		User user   `json:"user"`
-	}
 	statuses := []status{}
 	_ = json.NewDecoder(response.Body).Decode(&statuses)
 	for _, s := range statuses {
