@@ -33,20 +33,29 @@ var consumerSecret *string = flag.String(
 func main() {
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
-	
-	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
-		fmt.Println("You must set the --consumerkey and --consumersecret flags.")
-		fmt.Println("---")
-		os.Exit(1)
+
 	}
-	c := oauth.NewConsumer(
+
+	var c = oauth.NewConsumer(
 		*consumerKey,
 		*consumerSecret,
 		oauth.ServiceProvider{
 			RequestTokenUrl:   "https://api.twitter.com/oauth/request_token",
 			AuthorizeTokenUrl: "https://api.twitter.com/oauth/authorize",
-			AccessTokenUrl:    "https://api.twitter.com/oauth/access_token",
-		})
+			AccessTokenUrl:    "https://api.twitter.com/oauth/access_token", 
+			})
+
+
+
+
+	func loading () {
+
+	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
+		fmt.Println("You must set the --consumerkey and --consumersecret flags.")
+		fmt.Println("---")
+		os.Exit(1)
+	}
+	
 	requestToken, url, err := c.GetRequestTokenAndUrl("oob")
 	if err != nil {
 		log.Fatal(err)
@@ -78,6 +87,7 @@ func main() {
 
 		
 		}
-
 	}
+
+
 
