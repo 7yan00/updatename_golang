@@ -33,9 +33,8 @@ var consumerSecret *string = flag.String(
 func main() {
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
-
 	loading ()
-
+	
 	}
 
 	var c = oauth.NewConsumer(
@@ -50,7 +49,7 @@ func main() {
 
 
 
-	func loading () {
+func loading () {
 
 	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
 		fmt.Println("You must set the --consumerkey and --consumersecret flags.")
@@ -90,6 +89,4 @@ func main() {
 		
 		}
 	}
-
-
 
