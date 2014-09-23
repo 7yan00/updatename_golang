@@ -30,6 +30,8 @@ var consumerSecret *string = flag.String(
 	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9" ,
 	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
 
+var accessToken *oauth.AccessToken
+
 func main() {
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
@@ -67,12 +69,17 @@ func loading () {
 	verificationCode := ""
 	fmt.Scanln(&verificationCode)
 	fmt.Println("loading successed.")
-	accessToken, err := c.AuthorizeToken(requestToken, verificationCode)
+	accessToken, err = c.AuthorizeToken(requestToken, verificationCode)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	response, err := c.Get(
+	
+}
+
+func get_timeline () {
+
+response, err := c.Get(
 		"https://api.twitter.com/1.1/statuses/mentions_timeline.json",
 		map[string]string{},
 		accessToken)
@@ -86,7 +93,5 @@ func loading () {
 	for _, s := range statuses {
 		fmt.Printf("@%v: %v\n", s.User.ScreenName, s.Text)
 
-		
-		}
 	}
-
+}
