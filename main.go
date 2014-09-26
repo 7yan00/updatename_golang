@@ -10,24 +10,24 @@ import (
 )
 
 type user struct {
-		ID         int64  `json:"id"`
-		Name       string `json:"name"`
-		ScreenName string `json:"screen_name"`
-	}
+	ID         int64  `json:"id"`
+	Name       string `json:"name"`
+	ScreenName string `json:"screen_name"`
+}
 type status struct {
-		ID   int64  `json:"id"`
-		Text string `json:"text"`
-		User user   `json:"user"`
-	}
+	ID   int64  `json:"id"`
+	Text string `json:"text"`
+	User user   `json:"user"`
+}
 
 var consumerKey *string = flag.String(
-	"consumerkey" ,
+	"consumerkey",
 	"mEF22DxPk6cocNoc3lQQBoj55",
 	"Consumer Key from Twitter. See: https://dev.twitter.com/apps/new")
 
 var consumerSecret *string = flag.String(
-	"consumersecret" ,
-	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9" ,
+	"consumersecret",
+	"cGOq2NGmEqdwzVPPkQfMJuh6HEVFuVz5qFqBQJAteVuKC4ZQS9",
 	"Consumer Secret from Twitter. See: https://dev.twitter.com/apps/new")
 
 var accessToken *oauth.AccessToken
@@ -35,31 +35,28 @@ var accessToken *oauth.AccessToken
 func main() {
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
-	loading ()
-	get_timeline ()
-	
-	}
+	loading()
+	get_timeline()
 
-	var c = oauth.NewConsumer(
-		*consumerKey,
-		*consumerSecret,
-		oauth.ServiceProvider{
-			RequestTokenUrl:   "https://api.twitter.com/oauth/request_token",
-			AuthorizeTokenUrl: "https://api.twitter.com/oauth/authorize",
-			AccessTokenUrl:    "https://api.twitter.com/oauth/access_token", 
-			})
+}
 
+var c = oauth.NewConsumer(
+	*consumerKey,
+	*consumerSecret,
+	oauth.ServiceProvider{
+		RequestTokenUrl:   "https://api.twitter.com/oauth/request_token",
+		AuthorizeTokenUrl: "https://api.twitter.com/oauth/authorize",
+		AccessTokenUrl:    "https://api.twitter.com/oauth/access_token",
+	})
 
-
-
-func loading () {
+func loading() {
 
 	if len(*consumerKey) == 0 || len(*consumerSecret) == 0 {
 		fmt.Println("You must set the --consumerkey and --consumersecret flags.")
 		fmt.Println("---")
 		os.Exit(1)
 	}
-	
+
 	requestToken, url, err := c.GetRequestTokenAndUrl("oob")
 	if err != nil {
 		log.Fatal(err)
@@ -75,12 +72,11 @@ func loading () {
 		log.Fatal(err)
 	}
 
-	
 }
 
-func get_timeline () {
+func get_timeline() {
 
-response, err := c.Get(
+	response, err := c.Get(
 		"https://api.twitter.com/1.1/statuses/mentions_timeline.json",
 		map[string]string{},
 		accessToken)
@@ -97,9 +93,10 @@ response, err := c.Get(
 	}
 }
 
-func  post_tweet () {
+func post_tweet() {
 
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
+							map[string]string{"status":{"hello!"}},
+							accessToken)
 
-	map[string][]string{"status": []string {"hello!"} }　, accessToken)
 }
