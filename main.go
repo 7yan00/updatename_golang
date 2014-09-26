@@ -101,5 +101,5 @@ func  post_tweet () {
 
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
 
-	map[string][]string{"status": []string {"hello!"} })
+	map[string][]string{"status": []string {"hello!"} }　, accessToken)
 }
