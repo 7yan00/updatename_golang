@@ -36,6 +36,7 @@ func main() {
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
 	loading ()
+	get_timeline ()
 	
 	}
 
