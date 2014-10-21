@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/mrjones/oauth"
 	"log"
 	"os"
+
+	"github.com/mrjones/oauth"
 )
 
 type user struct {
@@ -74,16 +76,25 @@ func loading() {
 
 }
 
-func get_timeline() {
+func get_timeline(procLine func(b []byte)) {
 
 	response, err := c.Get(
-		"https://api.twitter.com/1.1/statuses/mentions_timeline.json",
+		"https://userstream.twitter.com/1.1/user.json",
 		map[string]string{},
 		accessToken)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer response.Body.Close()
+
+	scanner := bufio.NewScanner(response.Body)
+	for scanner.Scan() {
+		go procLine([]byte(scanner.Text()))
+	}
+	if err = scanner.Err(); err != nil {
+		fmt.Println(err)
+	}
 
 	statuses := []status{}
 	_ = json.NewDecoder(response.Body).Decode(&statuses)
@@ -96,7 +107,7 @@ func get_timeline() {
 func post_tweet() {
 
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
-							map[string]string{"status":{"hello!"}},
-							accessToken)
+		map[string]string{"status": {"hello!"}},
+		accessToken)
 
 }
