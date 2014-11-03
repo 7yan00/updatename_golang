@@ -11,6 +11,7 @@ import (
 	"github.com/mrjones/oauth"
 )
 
+
 type user struct {
 	ID         int64  `json:"id"`
 	Name       string `json:"name"`
@@ -35,11 +36,41 @@ var consumerSecret *string = flag.String(
 var accessToken *oauth.AccessToken
 
 func main() {
+	re := regexp.MustCompile(`^(.+)\(@` + screenName + `\)$`)
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
 	loading()
-	get_timeline()
+	
+	get_timeline(func(b []byte)) {
+		s := new(status)
+		e := json.Unmarshal(b, s)
+		if err != nil {
+			return
+		}
 
+	match := re.FindStringSubmatch(s.text)
+	if len(match) != nil {
+			return
+	}
+
+	newName := strings.TrimSpace(match[1])
+	e = updatename(newname)
+
+	if err != nil {
+		fmt.Println("falied")
+		fmt.Println(e)
+
+	}
+
+	fmt.Println(newName)
+	e = updateStatus(fmt.Sprintf("@%v 「%v」に改名したのです" ,s,User.ScreenName, newName), s.Id)
+
+	if err != nil {
+			fmt.Println("tweet failed")
+			fmt.Println(e)
+	}
+
+}
 }
 
 var c = oauth.NewConsumer(
@@ -104,10 +135,21 @@ func get_timeline(procLine func(b []byte)) {
 	}
 }
 
-func post_tweet() {
-
+func UpdateStatus(text string, inReplyToStatusId uint64) error {
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
-		map[string]string{"status": {"hello!"}},
-		accessToken)
+	{"status": []string{text}, "in_reply_to_status_id": []string{fmt.Sprint(inReplyToStatusId)}}, accessToken)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+}
 
+func updateName(name string) error {
+
+	response, err := c.Post("https://api.twitter.com/1.1/account/update_profile.json",
+		map[string]string{"name": name}, accessToken)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
 }
