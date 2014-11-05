@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
+	"strings"
 
 	"github.com/mrjones/oauth"
 )
-
 
 type user struct {
 	ID         int64  `json:"id"`
@@ -36,41 +37,42 @@ var consumerSecret *string = flag.String(
 var accessToken *oauth.AccessToken
 
 func main() {
+	screenName := "rrr"
 	re := regexp.MustCompile(`^(.+)\(@` + screenName + `\)$`)
 	flag.Parse()
 	fmt.Println("loading consumerkey......")
 	loading()
-	
-	get_timeline(func(b []byte)) {
+
+	get_timeline(func(b []byte) {
 		s := new(status)
-		e := json.Unmarshal(b, s)
+		err := json.Unmarshal(b, s)
 		if err != nil {
 			return
 		}
 
-	match := re.FindStringSubmatch(s.text)
-	if len(match) != nil {
+		match := re.FindStringSubmatch(s.text)
+		if len(match) != nil {
 			return
-	}
+		}
 
-	newName := strings.TrimSpace(match[1])
-	e = updatename(newname)
+		newName := strings.TrimSpace(match[1])
+		err = updateName(newName)
 
-	if err != nil {
-		fmt.Println("falied")
-		fmt.Println(e)
+		if err != nil {
+			fmt.Println("falied")
+			fmt.Println(err)
 
-	}
+		}
 
-	fmt.Println(newName)
-	e = updateStatus(fmt.Sprintf("@%v 「%v」に改名したのです" ,s,User.ScreenName, newName), s.Id)
+		fmt.Println(newName)
+		err = UpdateStatus(fmt.Sprintf("@%v 「%v」に改名したのです", s, User.ScreenName, newName), s.Id)
 
-	if err != nil {
+		if err != nil {
 			fmt.Println("tweet failed")
-			fmt.Println(e)
-	}
+			fmt.Println(err)
+		}
 
-}
+	})
 }
 
 var c = oauth.NewConsumer(
@@ -137,10 +139,12 @@ func get_timeline(procLine func(b []byte)) {
 
 func UpdateStatus(text string, inReplyToStatusId uint64) error {
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
-	{"status": []string{text}, "in_reply_to_status_id": []string{fmt.Sprint(inReplyToStatusId)}}, accessToken)
+		map[string][]string{"status": []string{text}, "in_reply_to_status_id": []string{fmt.Sprint(inReplyToStatusId)}}, accessToken)
+
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
 	defer response.Body.Close()
 }
 
