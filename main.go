@@ -65,7 +65,7 @@ func main() {
 		}
 
 		fmt.Println(newName)
-		err = UpdateStatus(fmt.Sprintf("@%v 「%v」に改名したのです", s, s.User.ScreenName, newName), s.Id)
+		err = UpdateStatus(fmt.Sprintf("@%v 「%v」に改名したのです", s.User.ScreenName, newName), s.Id)
 
 		if err != nil {
 			fmt.Println("tweet failed")
