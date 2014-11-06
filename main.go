@@ -135,13 +135,11 @@ func get_timeline(procLine func(b []byte)) {
 		fmt.Printf("@%v: %v\n", s.User.ScreenName, s.Text)
 
 	}
-
-	return
 }
 
 func UpdateStatus(text string, inReplyToStatusId uint64) error {
 	response, err := c.Post("https://api.twitter.com/1.1/statuses/update.json",
-		map[string][]string{"status": []string{text}, "in_reply_to_status_id": []string{fmt.Sprint(inReplyToStatusId)}}, accessToken)
+		map[string]string{"status": string{text}, "in_reply_to_status_id": string{fmt.Sprint(inReplyToStatusId)}}, accessToken)
 
 	if err != nil {
 		return err
