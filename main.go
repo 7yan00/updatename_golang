@@ -65,7 +65,7 @@ func main() {
 		}
 
 		fmt.Println(newName)
-		err = UpdateStatus(fmt.Sprintf("@%v 「%v」に改名したのです", s, User.ScreenName, newName), s.Id)
+		err = UpdateStatus(fmt.Sprintf("@%v 「%v」に改名したのです", s, user.screenName, newName), s.Id)
 
 		if err != nil {
 			fmt.Println("tweet failed")
@@ -135,6 +135,8 @@ func get_timeline(procLine func(b []byte)) {
 		fmt.Printf("@%v: %v\n", s.User.ScreenName, s.Text)
 
 	}
+
+	return
 }
 
 func UpdateStatus(text string, inReplyToStatusId uint64) error {
@@ -146,6 +148,8 @@ func UpdateStatus(text string, inReplyToStatusId uint64) error {
 	}
 
 	defer response.Body.Close()
+
+	return nil
 }
 
 func updateName(name string) error {
@@ -156,4 +160,6 @@ func updateName(name string) error {
 		log.Fatal(err)
 	}
 	defer response.Body.Close()
+
+	return nil
 }
